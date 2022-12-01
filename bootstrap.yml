@@ -1,0 +1,58 @@
+---
+ 
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (Ubuntu and Debian)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu","Debian"
+
+# Add user syncuser with key to all hosts
+- hosts: all
+  become: true
+  tasks:
+
+# Create user syncuser
+  - name: create syncuser user
+    tags: always
+    user:
+      name: syncuser
+      groups: root
+
+# Add key for syncuser
+  - name: add ssh key for syncuser
+    tags: always
+    authorized_key:
+      user: syncuser
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAJUAEh+4teIbn9kAJn4DPW/aYnDNWIaRXcGl1ZZhqow ansible"
+
+# Add syncuser to sudoers         
+  - name: add sudoers file for syncuser
+    tags: always
+    copy:
+      src: sudoer_syncuser
+      dest: /etc/sudoers.d/syncuser
+      owner: root
+      group: root
+      mode: 0440
+
+# Copy sshd file with user definition to server
+  - name: generate sshd_config file from template
+    tags: ssh
+    template:
+      src: "{{ ssh_template_file }}"
+      dest: /etc/ssh/sshd_config
+      owner: root
+      group: root
+      mode: 0644
+#    notify: restart_sshd
+
+# Restart sshd server to activate user rights
+  - name: restart_sshd
+    service:
+      name: sshd
+      state: restarted

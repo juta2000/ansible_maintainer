@@ -1,0 +1,7 @@
+- name: install mariadb package (Ubuntu, Debian)
+  tags: db,mariadb
+  apt:
+    name: mariadb-server
+    state: latest
+  when: ansible_distribution == "Debian","Ubuntu"
+

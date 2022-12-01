@@ -1,0 +1,8 @@
+apache_package_name: apache2
+apache_service: apache2
+php_package_name: libapache2-mod-php
+ssh_users: "jtapio simone syncuser"
+ssh_template_file: sshd_config_debian.j2
+webmin_repo: webmin_repo.j2
+webmin_gpg_key_url: "http://www.webmin.com/jcameron-key.asc"
+webmin_repo_folder: "/etc/apt/sources.list.d/webmin.list"
