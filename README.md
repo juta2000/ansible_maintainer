@@ -2,7 +2,7 @@
 
 Create users, update and maintain servers.
 
-bootstrap.yml 			- - >	With bootstrap script admin can create user with sudo rights to remote server
+bootstrap 			- - >	With bootstrap script admin can create user with sudo rights to remote server
 
 default_install 		- - >	Install default software to servers
 
